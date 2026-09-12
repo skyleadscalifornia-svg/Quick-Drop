@@ -1,0 +1,5 @@
+{
+  "name": "quick-drop",
+  "compatibility_date": "2026-09-12",
+  "main": "src/index.js"
+}
