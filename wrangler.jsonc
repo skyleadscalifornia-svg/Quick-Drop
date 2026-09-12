@@ -8,14 +8,7 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"],
-    "exclude": [
-      "worker.js",
-      "wrangler.jsonc",
-      "README.md",
-      ".git/**",
-      ".github/**"
-    ]
+    "run_worker_first": ["/api/*"]
   },
 
   "r2_buckets": [
