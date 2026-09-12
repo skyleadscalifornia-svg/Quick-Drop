@@ -2,274 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#0b0b0c"
-  >
-
-  <meta
-    name="description"
-    content="QuickDrop — your private clipboard for moving text and files between devices."
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="QuickDrop — a private clipboard and file transfer tool.">
   <title>QuickDrop — Private Clipboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <link
-    rel="stylesheet"
-    href="/style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <div
-    id="loginScreen"
-    class="login-screen hidden"
-  >
-    <div class="login-card">
+  <div class="app">
 
-      <div class="brand brand-large">
-        <span class="brand-mark">Q</span>
-        <span>QuickDrop</span>
-      </div>
-
-      <h1>Private clipboard</h1>
-
-      <p>
-        Enter your password to access your shared items.
-      </p>
-
-      <form id="loginForm">
-
-        <label
-          class="field-label"
-          for="passwordInput"
-        >
-          Password
-        </label>
-
-        <div class="password-wrap">
-
-          <input
-            id="passwordInput"
-            class="text-input"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter password"
-            required
-          >
-
-          <button
-            type="button"
-            id="togglePassword"
-            class="password-toggle"
-            aria-label="Show password"
-          >
-            Show
-          </button>
-
-        </div>
-
-        <p
-          id="loginError"
-          class="form-error hidden"
-        ></p>
-
-        <button
-          class="primary-button full-width"
-          type="submit"
-        >
-          Unlock QuickDrop
-        </button>
-
-      </form>
-
-    </div>
-  </div>
-
-
-  <!-- APP -->
-  <main
-    id="app"
-    class="app hidden"
-  >
-
+    <!-- HEADER -->
     <header class="topbar">
-
       <div class="brand">
-        <span class="brand-mark">Q</span>
-
+        <div class="brand-mark">Q</div>
         <div>
-          <div class="brand-name">
-            QuickDrop
-          </div>
-
-          <div class="brand-subtitle">
-            Private clipboard
-          </div>
+          <div class="brand-name">QuickDrop</div>
+          <div class="brand-subtitle">Private clipboard</div>
         </div>
       </div>
 
-      <div class="topbar-actions">
-
-        <span
-          id="connectionStatus"
-          class="connection-status"
-        >
-          <span class="status-dot"></span>
-          Connected
-        </span>
-
-        <button
-          id="logoutButton"
-          class="icon-button hidden"
-          type="button"
-          title="Lock QuickDrop"
-        >
-          Lock
-        </button>
-
+      <div class="connection-status">
+        <span class="status-dot"></span>
+        <span id="connectionText">Connected</span>
       </div>
-
     </header>
 
 
-    <section class="hero">
+    <!-- MAIN -->
+    <main class="main-content">
 
-      <div class="hero-copy">
-
-        <span class="eyebrow">
-          YOUR PRIVATE SPACE
-        </span>
-
-        <h1>
-          Move anything.<br>
-          <span>Anywhere.</span>
-        </h1>
-
+      <!-- HERO -->
+      <section class="hero">
+        <h1>Drop anything.<br><span>Grab it anywhere.</span></h1>
         <p>
-          Paste text, upload files, and pick them up
-          from any device using your permanent QuickDrop link.
+          Send text and files between your devices instantly.
+          No account required.
         </p>
-
-      </div>
-
-    </section>
+      </section>
 
 
-    <section class="workspace">
-
-      <!-- TEXT CARD -->
-      <div class="composer-card">
+      <!-- TEXT DROP -->
+      <section class="drop-card">
 
         <div class="card-header">
-
           <div>
-
             <h2>Drop some text</h2>
-
-            <p>
-              Paste or type. Your text is saved automatically.
-            </p>
-
+            <p>Paste or type anything here.</p>
           </div>
 
-          <span
-            id="saveStatus"
-            class="save-status"
-          >
-            Ready
-          </span>
-
+          <div class="save-status" id="saveStatus">
+            <span class="save-dot"></span>
+            <span>Ready</span>
+          </div>
         </div>
-
 
         <textarea
           id="textInput"
-          class="text-area"
-          placeholder="Paste anything here…"
-          maxlength="500000"
+          class="text-input"
+          placeholder="Paste text here..."
+          maxlength="100000"
           spellcheck="false"
         ></textarea>
 
+        <div class="text-footer">
+          <span id="charCount">0 characters</span>
 
-        <div class="composer-footer">
-
-          <span id="charCount">
-            0 characters
-          </span>
-
-          <button
-            id="saveTextButton"
-            class="primary-button"
-            type="button"
-          >
+          <button id="saveTextBtn" class="primary-button" type="button">
             Save text
           </button>
-
         </div>
 
-      </div>
+      </section>
 
 
       <!-- UPLOAD -->
-      <div
-        id="dropZone"
-        class="upload-card"
-      >
+      <section class="upload-card">
 
         <input
-          id="fileInput"
           type="file"
-          hidden
+          id="fileInput"
           multiple
+          hidden
         >
-
-        <div class="upload-icon">
-          ↑
-        </div>
-
-        <h2>
-          Upload files
-        </h2>
-
-        <p>
-          Images, videos, documents or anything else.
-        </p>
 
         <button
-          id="chooseFilesButton"
-          class="secondary-button"
+          id="uploadButton"
+          class="upload-area"
           type="button"
         >
-          Choose files
+          <div class="upload-icon">↑</div>
+
+          <div class="upload-title">
+            Upload files
+          </div>
+
+          <div class="upload-description">
+            Images, videos, documents and more
+          </div>
+
+          <div class="upload-limit">
+            Maximum file size: 100 MB
+          </div>
         </button>
 
-        <span class="upload-hint">
-          Up to 100 MB per file
-        </span>
+        <div id="uploadProgressContainer" class="upload-progress-container hidden">
+          <div class="upload-progress-header">
+            <span id="uploadFileName">Uploading...</span>
+            <span id="uploadProgressText">0%</span>
+          </div>
 
-      </div>
+          <div class="progress-track">
+            <div id="uploadProgressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+      </section>
 
 
       <!-- ITEMS -->
@@ -278,32 +132,13 @@
         <div class="section-header">
 
           <div>
-
-            <div class="section-title-row">
-
-              <h2>
-                Shared items
-              </h2>
-
-              <span
-                id="itemCount"
-                class="item-count"
-              >
-                0
-              </span>
-
-            </div>
-
-            <p>
-              Everything you've saved appears here.
-            </p>
-
+            <h2>Shared items</h2>
+            <p id="itemsDescription">Everything you've dropped appears here.</p>
           </div>
-
 
           <button
             id="deleteAllButton"
-            class="danger-button hidden"
+            class="delete-all-button"
             type="button"
           >
             Delete all
@@ -312,91 +147,69 @@
         </div>
 
 
-        <div
-          id="loadingState"
-          class="loading-state"
-        >
-          <div class="spinner"></div>
-          Loading your items…
-        </div>
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="empty-state">
 
+          <div class="empty-icon">↓</div>
 
-        <div
-          id="emptyState"
-          class="empty-state hidden"
-        >
-
-          <div class="empty-icon">
-            ○
-          </div>
-
-          <h3>
-            Nothing here yet
-          </h3>
+          <h3>Nothing here yet</h3>
 
           <p>
-            Paste some text or upload a file to get started.
+            Paste some text or upload a file<br>
+            to see it appear here.
           </p>
 
         </div>
 
 
-        <div
-          id="itemsList"
-          class="items-list"
-        ></div>
+        <!-- ITEMS CONTAINER -->
+        <div id="itemsContainer" class="items-container"></div>
 
       </section>
 
-    </section>
+    </main>
 
 
+    <!-- FOOTER -->
     <footer class="footer">
 
-      <span>
+      <div>
         QuickDrop
-      </span>
+      </div>
 
-      <span class="footer-separator">
-        ·
-      </span>
-
-      <span>
-        Your private clipboard
-      </span>
+      <div>
+        <span>Fast</span>
+        <span class="footer-separator">•</span>
+        <span>Simple</span>
+        <span class="footer-separator">•</span>
+        <span>Private</span>
+      </div>
 
     </footer>
 
-  </main>
+  </div>
 
 
-  <!-- DELETE CONFIRMATION -->
-  <div
-    id="confirmModal"
-    class="modal hidden"
-  >
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="deleteModal" class="modal hidden">
 
     <div class="modal-backdrop"></div>
 
-    <div class="modal-card">
+    <div class="modal-box">
 
-      <div class="modal-icon danger">
-        !
-      </div>
+      <div class="modal-icon danger">!</div>
 
-      <h2>
-        Delete everything?
-      </h2>
+      <h2>Delete everything?</h2>
 
       <p>
-        This permanently removes all text and files
-        from QuickDrop. This cannot be undone.
+        This will permanently delete all shared items.
+        This action cannot be undone.
       </p>
 
       <div class="modal-actions">
 
         <button
-          id="cancelDelete"
+          id="cancelDeleteButton"
           class="secondary-button"
           type="button"
         >
@@ -404,11 +217,11 @@
         </button>
 
         <button
-          id="confirmDelete"
-          class="danger-solid-button"
+          id="confirmDeleteButton"
+          class="danger-button"
           type="button"
         >
-          Delete everything
+          Delete all
         </button>
 
       </div>
@@ -418,631 +231,44 @@
   </div>
 
 
+  <!-- IMAGE / VIDEO PREVIEW MODAL -->
+  <div id="previewModal" class="modal hidden">
+
+    <div
+      id="previewBackdrop"
+      class="modal-backdrop"
+    ></div>
+
+    <div class="preview-box">
+
+      <button
+        id="closePreviewButton"
+        class="close-button"
+        type="button"
+        aria-label="Close preview"
+      >
+        ×
+      </button>
+
+      <div id="previewContent"></div>
+
+    </div>
+
+  </div>
+
+
   <!-- TOAST -->
   <div
-    id="toastContainer"
-    class="toast-container"
-  ></div>
-
-
-  <script>
-    const state = {
-      items: [],
-      authenticated: false,
-      passwordEnabled: false,
-      savingText: false,
-      uploading: 0
-    };
-
-
-    const elements = {
-      app: document.getElementById("app"),
-      loginScreen: document.getElementById("loginScreen"),
-
-      loginForm: document.getElementById("loginForm"),
-      passwordInput: document.getElementById("passwordInput"),
-      togglePassword: document.getElementById("togglePassword"),
-      loginError: document.getElementById("loginError"),
-
-      logoutButton: document.getElementById("logoutButton"),
-
-      textInput: document.getElementById("textInput"),
-      charCount: document.getElementById("charCount"),
-      saveTextButton: document.getElementById("saveTextButton"),
-      saveStatus: document.getElementById("saveStatus"),
-
-      chooseFilesButton: document.getElementById("chooseFilesButton"),
-      fileInput: document.getElementById("fileInput"),
-      dropZone: document.getElementById("dropZone"),
-
-      itemsList: document.getElementById("itemsList"),
-      itemCount: document.getElementById("itemCount"),
-      emptyState: document.getElementById("emptyState"),
-      loadingState: document.getElementById("loadingState"),
-
-      deleteAllButton: document.getElementById("deleteAllButton"),
-
-      confirmModal: document.getElementById("confirmModal"),
-      cancelDelete: document.getElementById("cancelDelete"),
-      confirmDelete: document.getElementById("confirmDelete"),
-
-      toastContainer: document.getElementById("toastContainer"),
-
-      connectionStatus: document.getElementById("connectionStatus")
-    };
-
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-
-    function formatBytes(bytes) {
-      if (!bytes || bytes <= 0) {
-        return "0 B";
-      }
-
-      const units = [
-        "B",
-        "KB",
-        "MB",
-        "GB"
-      ];
-
-      const index = Math.floor(
-        Math.log(bytes) /
-        Math.log(1024)
-      );
-
-      const safeIndex = Math.min(
-        index,
-        units.length - 1
-      );
-
-      const value =
-        bytes /
-        Math.pow(1024, safeIndex);
-
-      return `${value.toFixed(
-        value >= 10 || safeIndex === 0
-          ? 0
-          : 1
-      )} ${units[safeIndex]}`;
-    }
-
-
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-
-      if (Number.isNaN(date.getTime())) {
-        return "";
-      }
-
-      return date.toLocaleString(
-        undefined,
-        {
-          dateStyle: "medium",
-          timeStyle: "short"
-        }
-      );
-    }
-
-
-    function isImage(item) {
-      return Boolean(
-        item.mimeType &&
-        item.mimeType.startsWith("image/")
-      );
-    }
-
-
-    function isVideo(item) {
-      return Boolean(
-        item.mimeType &&
-        item.mimeType.startsWith("video/")
-      );
-    }
-
-
-    function isAudio(item) {
-      return Boolean(
-        item.mimeType &&
-        item.mimeType.startsWith("audio/")
-      );
-    }
-
-
-    function fileUrl(id) {
-      return `/api/file/${encodeURIComponent(id)}`;
-    }
-
-
-    function showToast(message, type = "normal") {
-      const toast =
-        document.createElement("div");
-
-      toast.className =
-        `toast toast-${type}`;
-
-      toast.textContent = message;
-
-      elements.toastContainer.appendChild(
-        toast
-      );
-
-      requestAnimationFrame(() => {
-        toast.classList.add("show");
-      });
-
-      setTimeout(() => {
-        toast.classList.remove("show");
-
-        setTimeout(() => {
-          toast.remove();
-        }, 250);
-      }, 3200);
-    }
-
-
-    function setConnection(connected) {
-      if (connected) {
-        elements.connectionStatus.innerHTML =
-          '<span class="status-dot"></span> Connected';
-
-        elements.connectionStatus.classList.remove(
-          "offline"
-        );
-      } else {
-        elements.connectionStatus.innerHTML =
-          '<span class="status-dot"></span> Offline';
-
-        elements.connectionStatus.classList.add(
-          "offline"
-        );
-      }
-    }
-
-
-    function updateCharacterCount() {
-      const count =
-        elements.textInput.value.length;
-
-      elements.charCount.textContent =
-        `${count.toLocaleString()} character${count === 1 ? "" : "s"}`;
-    }
-
-
-    async function api(url, options = {}) {
-      const response =
-        await fetch(url, {
-          credentials: "same-origin",
-          ...options
-        });
-
-      let data = null;
-
-      try {
-        data = await response.json();
-      } catch {
-        // Response has no JSON.
-      }
-
-      if (!response.ok) {
-        const error =
-          data?.error ||
-          `Request failed (${response.status})`;
-
-        const authError =
-          response.status === 401;
-
-        const err =
-          new Error(error);
-
-        err.authError = authError;
-
-        throw err;
-      }
-
-      return data;
-    }
-
-
-    async function checkAuthentication() {
-      try {
-        const data =
-          await api("/api/auth/status");
-
-        state.passwordEnabled =
-          Boolean(data.passwordEnabled);
-
-        state.authenticated =
-          Boolean(data.authenticated);
-
-        if (
-          state.passwordEnabled &&
-          !state.authenticated
-        ) {
-          showLogin();
-        } else {
-          showApp();
-          await loadItems();
-        }
-
-      } catch (error) {
-        setConnection(false);
-
-        if (error.authError) {
-          showLogin();
-        } else {
-          showToast(
-            error.message,
-            "error"
-          );
-        }
-      }
-    }
-
-
-    function showLogin() {
-      elements.app.classList.add("hidden");
-      elements.loginScreen.classList.remove(
-        "hidden"
-      );
-
-      elements.passwordInput.focus();
-
-      elements.logoutButton.classList.add(
-        "hidden"
-      );
-    }
-
-
-    function showApp() {
-      elements.loginScreen.classList.add(
-        "hidden"
-      );
-
-      elements.app.classList.remove(
-        "hidden"
-      );
-
-      if (state.passwordEnabled) {
-        elements.logoutButton.classList.remove(
-          "hidden"
-        );
-      }
-
-      setConnection(true);
-    }
-
-
-    async function login(password) {
-      elements.loginError.classList.add(
-        "hidden"
-      );
-
-      try {
-        await api(
-          "/api/auth/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-            body: JSON.stringify({
-              password
-            })
-          }
-        );
-
-        state.authenticated = true;
-
-        elements.passwordInput.value = "";
-
-        showApp();
-
-        await loadItems();
-
-      } catch (error) {
-        elements.loginError.textContent =
-          error.message;
-
-        elements.loginError.classList.remove(
-          "hidden"
-        );
-      }
-    }
-
-
-    async function logout() {
-      try {
-        await api(
-          "/api/auth/logout",
-          {
-            method: "POST"
-          }
-        );
-
-        state.authenticated = false;
-
-        showLogin();
-
-      } catch (error) {
-        showToast(
-          error.message,
-          "error"
-        );
-      }
-    }
-
-
-    async function loadItems() {
-      elements.loadingState.classList.remove(
-        "hidden"
-      );
-
-      elements.emptyState.classList.add(
-        "hidden"
-      );
-
-      try {
-        const data =
-          await api("/api/items");
-
-        state.items =
-          Array.isArray(data.items)
-            ? data.items
-            : [];
-
-        setConnection(true);
-
-        renderItems();
-
-      } catch (error) {
-        setConnection(false);
-
-        if (error.authError) {
-          showLogin();
-        } else {
-          showToast(
-            error.message,
-            "error"
-          );
-        }
-
-      } finally {
-        elements.loadingState.classList.add(
-          "hidden"
-        );
-      }
-    }
-
-
-    function renderItems() {
-      const items =
-        state.items;
-
-      elements.itemCount.textContent =
-        items.length;
-
-      elements.deleteAllButton.classList.toggle(
-        "hidden",
-        items.length === 0
-      );
-
-      if (items.length === 0) {
-        elements.emptyState.classList.remove(
-          "hidden"
-        );
-
-        elements.itemsList.innerHTML = "";
-
-        return;
-      }
-
-      elements.emptyState.classList.add(
-        "hidden"
-      );
-
-      elements.itemsList.innerHTML =
-        items.map(renderItem).join("");
-
-      attachItemEvents();
-    }
-
-
-    function renderItem(item) {
-      if (item.type === "text") {
-        return renderTextItem(item);
-      }
-
-      return renderFileItem(item);
-    }
-
-
-    function renderTextItem(item) {
-      const preview =
-        escapeHtml(item.text);
-
-      return `
-        <article
-          class="item-card text-item"
-          data-id="${escapeHtml(item.id)}"
-        >
-
-          <div class="item-main">
-
-            <div class="item-icon text-icon">
-              T
-            </div>
-
-            <div class="item-content">
-
-              <div class="item-topline">
-
-                <span class="item-type">
-                  TEXT
-                </span>
-
-                <span class="item-date">
-                  ${escapeHtml(
-                    formatDate(item.createdAt)
-                  )}
-                </span>
-
-              </div>
-
-              <div class="text-preview">
-                ${preview}
-              </div>
-
-              <div class="item-meta">
-                ${formatBytes(item.size)}
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="item-actions">
-
-            <button
-              class="item-button copy-button"
-              data-action="copy"
-              data-id="${escapeHtml(item.id)}"
-              type="button"
-            >
-              Copy
-            </button>
-
-            <button
-              class="item-button delete-button"
-              data-action="delete"
-              data-id="${escapeHtml(item.id)}"
-              type="button"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </article>
-      `;
-    }
-
-
-    function renderFileItem(item) {
-      const url =
-        fileUrl(item.id);
-
-      let visual = `
-        <div class="item-icon file-icon">
-          ↗
-        </div>
-      `;
-
-      if (isImage(item)) {
-        visual = `
-          <div class="file-thumbnail">
-            <img
-              src="${url}"
-              alt=""
-              loading="lazy"
-            >
-          </div>
-        `;
-      } else if (isVideo(item)) {
-        visual = `
-          <div class="item-icon video-icon">
-            ▶
-          </div>
-        `;
-      } else if (isAudio(item)) {
-        visual = `
-          <div class="item-icon audio-icon">
-            ♪
-          </div>
-        `;
-      }
-
-      return `
-        <article
-          class="item-card file-item"
-          data-id="${escapeHtml(item.id)}"
-        >
-
-          <div class="item-main">
-
-            ${visual}
-
-            <div class="item-content">
-
-              <div class="item-topline">
-
-                <span class="item-type">
-                  ${escapeHtml(
-                    item.mimeType ||
-                    "FILE"
-                  ).toUpperCase()}
-                </span>
-
-                <span class="item-date">
-                  ${escapeHtml(
-                    formatDate(item.createdAt)
-                  )}
-                </span>
-
-              </div>
-
-              <div
-                class="file-name"
-                title="${escapeHtml(item.name)}"
-              >
-                ${escapeHtml(item.name)}
-              </div>
-
-              <div class="item-meta">
-                ${formatBytes(item.size)}
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="item-actions">
-
-            ${
-              isVideo(item)
-                ? `
-                  <a
-                    class="item-button"
-                    href="${url}"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    Play
-                  </a>
-                `
-                : isImage(item)
-                  ? `
-                    <a
-                      class="item-button"
-                      href="${url}"
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      View
-                    </a>
-                  `
-                  : `
-                    <a
-                      class="item-button"
-                      href="${url}"
-                      target="_blank"
- 
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  >
+    <span id="toastMessage"></span>
+  </div>
+
+
+  <script src="app.js"></script>
+
+</body>
+</html>
