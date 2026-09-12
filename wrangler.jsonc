@@ -1,12 +1,23 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
+
   "name": "quick-drop",
   "main": "worker.js",
   "compatibility_date": "2026-09-12",
+
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
+    "exclude": [
+      "worker.js",
+      "wrangler.jsonc",
+      "README.md",
+      ".git/**",
+      ".github/**"
+    ]
   },
+
   "r2_buckets": [
     {
       "binding": "QUICKDROP",
