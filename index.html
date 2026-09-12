@@ -2,231 +2,415 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b0b0c"
+  >
+
+  <meta
+    name="description"
+    content="QuickDrop — your private clipboard for moving text and files between devices."
+  >
 
   <title>QuickDrop — Private Clipboard</title>
-  <meta name="description" content="A simple private clipboard for transferring text and files between devices.">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
 </head>
 
 <body>
 
-  <div class="app">
+  <!-- LOGIN -->
+  <div
+    id="loginScreen"
+    class="login-screen hidden"
+  >
+    <div class="login-card">
 
-    <!-- Header -->
-    <header class="header">
-      <a class="brand" href="/">
-        <div class="brand-icon">Q</div>
-        <div>
-          <h1>QuickDrop</h1>
-          <span>Private clipboard</span>
+      <div class="brand brand-large">
+        <span class="brand-mark">Q</span>
+        <span>QuickDrop</span>
+      </div>
+
+      <h1>Private clipboard</h1>
+
+      <p>
+        Enter your password to access your shared items.
+      </p>
+
+      <form id="loginForm">
+
+        <label
+          class="field-label"
+          for="passwordInput"
+        >
+          Password
+        </label>
+
+        <div class="password-wrap">
+
+          <input
+            id="passwordInput"
+            class="text-input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter password"
+            required
+          >
+
+          <button
+            type="button"
+            id="togglePassword"
+            class="password-toggle"
+            aria-label="Show password"
+          >
+            Show
+          </button>
+
         </div>
-      </a>
 
-      <button class="lock-button" id="passwordButton">
-        <span>🔒</span>
-        <span>Password</span>
-        <span class="status-dot"></span>
-      </button>
+        <p
+          id="loginError"
+          class="form-error hidden"
+        ></p>
+
+        <button
+          class="primary-button full-width"
+          type="submit"
+        >
+          Unlock QuickDrop
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- APP -->
+  <main
+    id="app"
+    class="app hidden"
+  >
+
+    <header class="topbar">
+
+      <div class="brand">
+        <span class="brand-mark">Q</span>
+
+        <div>
+          <div class="brand-name">
+            QuickDrop
+          </div>
+
+          <div class="brand-subtitle">
+            Private clipboard
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+
+        <span
+          id="connectionStatus"
+          class="connection-status"
+        >
+          <span class="status-dot"></span>
+          Connected
+        </span>
+
+        <button
+          id="logoutButton"
+          class="icon-button hidden"
+          type="button"
+          title="Lock QuickDrop"
+        >
+          Lock
+        </button>
+
+      </div>
+
     </header>
 
 
-    <!-- Main -->
-    <main>
+    <section class="hero">
 
-      <section class="hero">
-        <div class="badge">
-          <span class="online-dot"></span>
-          Ready to transfer
-        </div>
+      <div class="hero-copy">
 
-        <h2>Move anything<br><span>between your devices.</span></h2>
+        <span class="eyebrow">
+          YOUR PRIVATE SPACE
+        </span>
+
+        <h1>
+          Move anything.<br>
+          <span>Anywhere.</span>
+        </h1>
 
         <p>
-          Paste text or upload files here. Open QuickDrop on another
-          device and everything will be waiting for you.
+          Paste text, upload files, and pick them up
+          from any device using your permanent QuickDrop link.
         </p>
-      </section>
+
+      </div>
+
+    </section>
 
 
-      <!-- Clipboard Input -->
-      <section class="drop-zone" id="dropZone">
+    <section class="workspace">
 
-        <div class="drop-icon">
-          <span>＋</span>
+      <!-- TEXT CARD -->
+      <div class="composer-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>Drop some text</h2>
+
+            <p>
+              Paste or type. Your text is saved automatically.
+            </p>
+
+          </div>
+
+          <span
+            id="saveStatus"
+            class="save-status"
+          >
+            Ready
+          </span>
+
         </div>
+
 
         <textarea
           id="textInput"
-          placeholder="Paste or type your text here..."
+          class="text-area"
+          placeholder="Paste anything here…"
+          maxlength="500000"
           spellcheck="false"
         ></textarea>
 
-        <div class="input-footer">
-          <span id="charCount">0 characters</span>
 
-          <span class="save-status" id="saveStatus">
-            <span class="save-dot"></span>
-            Saves automatically
+        <div class="composer-footer">
+
+          <span id="charCount">
+            0 characters
           </span>
+
+          <button
+            id="saveTextButton"
+            class="primary-button"
+            type="button"
+          >
+            Save text
+          </button>
+
         </div>
 
-      </section>
+      </div>
 
 
-      <!-- Upload Area -->
-      <section class="upload-area">
-
-        <label for="fileInput" class="upload-button">
-          <span class="upload-icon">↑</span>
-
-          <span>
-            <strong>Upload files</strong>
-            <small>Images, videos, documents & more</small>
-          </span>
-
-          <span class="arrow">→</span>
-        </label>
+      <!-- UPLOAD -->
+      <div
+        id="dropZone"
+        class="upload-card"
+      >
 
         <input
-          type="file"
           id="fileInput"
-          multiple
+          type="file"
           hidden
-        />
+          multiple
+        >
 
-        <p class="upload-note">
-          Your files will appear below after uploading.
+        <div class="upload-icon">
+          ↑
+        </div>
+
+        <h2>
+          Upload files
+        </h2>
+
+        <p>
+          Images, videos, documents or anything else.
         </p>
 
-      </section>
+        <button
+          id="chooseFilesButton"
+          class="secondary-button"
+          type="button"
+        >
+          Choose files
+        </button>
+
+        <span class="upload-hint">
+          Up to 100 MB per file
+        </span>
+
+      </div>
 
 
-      <!-- Shared Items -->
+      <!-- ITEMS -->
       <section class="items-section">
 
-        <div class="section-heading">
+        <div class="section-header">
 
           <div>
-            <span class="section-label">SHARED CLIPBOARD</span>
-            <h3>Your items</h3>
+
+            <div class="section-title-row">
+
+              <h2>
+                Shared items
+              </h2>
+
+              <span
+                id="itemCount"
+                class="item-count"
+              >
+                0
+              </span>
+
+            </div>
+
+            <p>
+              Everything you've saved appears here.
+            </p>
+
           </div>
 
-          <button class="delete-all" id="deleteAllButton">
+
+          <button
+            id="deleteAllButton"
+            class="danger-button hidden"
+            type="button"
+          >
             Delete all
           </button>
 
         </div>
 
 
-        <div id="itemsContainer">
+        <div
+          id="loadingState"
+          class="loading-state"
+        >
+          <div class="spinner"></div>
+          Loading your items…
+        </div>
 
-          <!-- Empty state -->
-          <div class="empty-state" id="emptyState">
 
-            <div class="empty-icon">□</div>
+        <div
+          id="emptyState"
+          class="empty-state hidden"
+        >
 
-            <h4>Nothing here yet</h4>
-
-            <p>
-              Paste some text or upload a file to get started.
-            </p>
-
+          <div class="empty-icon">
+            ○
           </div>
+
+          <h3>
+            Nothing here yet
+          </h3>
+
+          <p>
+            Paste some text or upload a file to get started.
+          </p>
 
         </div>
 
+
+        <div
+          id="itemsList"
+          class="items-list"
+        ></div>
+
       </section>
 
-    </main>
+    </section>
 
 
-    <!-- Footer -->
-    <footer>
+    <footer class="footer">
 
-      <div class="footer-left">
-        <span class="footer-logo">Q</span>
-        <span>QuickDrop</span>
-      </div>
+      <span>
+        QuickDrop
+      </span>
 
-      <span class="footer-text">
-        Your simple cross-device clipboard
+      <span class="footer-separator">
+        ·
+      </span>
+
+      <span>
+        Your private clipboard
       </span>
 
     </footer>
 
-  </div>
+  </main>
 
 
-  <!-- Password Modal -->
-  <div class="modal-overlay" id="passwordModal">
+  <!-- DELETE CONFIRMATION -->
+  <div
+    id="confirmModal"
+    class="modal hidden"
+  >
 
-    <div class="modal">
+    <div class="modal-backdrop"></div>
 
-      <button class="modal-close" id="closePasswordModal">×</button>
+    <div class="modal-card">
 
-      <div class="modal-icon">🔒</div>
-
-      <h3>Password protection</h3>
-
-      <p>
-        Protect your shared clipboard with an optional password.
-      </p>
-
-      <label class="switch-row">
-        <span>
-          <strong>Enable password</strong>
-          <small>Require a password to access your items.</small>
-        </span>
-
-        <input type="checkbox" id="passwordToggle">
-        <span class="switch"></span>
-      </label>
-
-      <div class="password-field" id="passwordField">
-
-        <label for="passwordInput">Password</label>
-
-        <input
-          type="password"
-          id="passwordInput"
-          placeholder="Enter a password"
-        />
-
+      <div class="modal-icon danger">
+        !
       </div>
 
-      <button class="modal-save" id="savePassword">
-        Save settings
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- Delete Confirmation -->
-  <div class="modal-overlay" id="deleteModal">
-
-    <div class="modal delete-modal">
-
-      <div class="danger-icon">!</div>
-
-      <h3>Delete everything?</h3>
+      <h2>
+        Delete everything?
+      </h2>
 
       <p>
-        This will permanently remove all text and uploaded files
-        from the shared clipboard.
+        This permanently removes all text and files
+        from QuickDrop. This cannot be undone.
       </p>
 
       <div class="modal-actions">
-        <button class="cancel-button" id="cancelDelete">
+
+        <button
+          id="cancelDelete"
+          class="secondary-button"
+          type="button"
+        >
           Cancel
         </button>
 
-        <button class="confirm-delete" id="confirmDelete">
-          Delete all
+        <button
+          id="confirmDelete"
+          class="danger-solid-button"
+          type="button"
+        >
+          Delete everything
         </button>
+
       </div>
 
     </div>
@@ -234,321 +418,631 @@
   </div>
 
 
+  <!-- TOAST -->
+  <div
+    id="toastContainer"
+    class="toast-container"
+  ></div>
+
+
   <script>
-
-    const textInput = document.getElementById("textInput");
-    const charCount = document.getElementById("charCount");
-    const saveStatus = document.getElementById("saveStatus");
-
-    const fileInput = document.getElementById("fileInput");
-    const dropZone = document.getElementById("dropZone");
-
-    const itemsContainer = document.getElementById("itemsContainer");
-    const emptyState = document.getElementById("emptyState");
-
-    const passwordButton = document.getElementById("passwordButton");
-    const passwordModal = document.getElementById("passwordModal");
-    const closePasswordModal =
-      document.getElementById("closePasswordModal");
-
-    const passwordToggle =
-      document.getElementById("passwordToggle");
-
-    const passwordField =
-      document.getElementById("passwordField");
-
-    const savePassword =
-      document.getElementById("savePassword");
-
-    const deleteAllButton =
-      document.getElementById("deleteAllButton");
-
-    const deleteModal =
-      document.getElementById("deleteModal");
-
-    const cancelDelete =
-      document.getElementById("cancelDelete");
-
-    const confirmDelete =
-      document.getElementById("confirmDelete");
+    const state = {
+      items: [],
+      authenticated: false,
+      passwordEnabled: false,
+      savingText: false,
+      uploading: 0
+    };
 
 
-    /* Character counter */
+    const elements = {
+      app: document.getElementById("app"),
+      loginScreen: document.getElementById("loginScreen"),
 
-    textInput.addEventListener("input", () => {
+      loginForm: document.getElementById("loginForm"),
+      passwordInput: document.getElementById("passwordInput"),
+      togglePassword: document.getElementById("togglePassword"),
+      loginError: document.getElementById("loginError"),
 
-      const length = textInput.value.length;
+      logoutButton: document.getElementById("logoutButton"),
 
-      charCount.textContent =
-        length.toLocaleString() +
-        (length === 1 ? " character" : " characters");
+      textInput: document.getElementById("textInput"),
+      charCount: document.getElementById("charCount"),
+      saveTextButton: document.getElementById("saveTextButton"),
+      saveStatus: document.getElementById("saveStatus"),
 
-      if (length > 0) {
+      chooseFilesButton: document.getElementById("chooseFilesButton"),
+      fileInput: document.getElementById("fileInput"),
+      dropZone: document.getElementById("dropZone"),
 
-        saveStatus.innerHTML =
-          '<span class="save-dot"></span> Ready to save';
+      itemsList: document.getElementById("itemsList"),
+      itemCount: document.getElementById("itemCount"),
+      emptyState: document.getElementById("emptyState"),
+      loadingState: document.getElementById("loadingState"),
 
-      } else {
+      deleteAllButton: document.getElementById("deleteAllButton"),
 
-        saveStatus.innerHTML =
-          '<span class="save-dot"></span> Saves automatically';
+      confirmModal: document.getElementById("confirmModal"),
+      cancelDelete: document.getElementById("cancelDelete"),
+      confirmDelete: document.getElementById("confirmDelete"),
 
+      toastContainer: document.getElementById("toastContainer"),
+
+      connectionStatus: document.getElementById("connectionStatus")
+    };
+
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes <= 0) {
+        return "0 B";
       }
 
-    });
+      const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+      ];
+
+      const index = Math.floor(
+        Math.log(bytes) /
+        Math.log(1024)
+      );
+
+      const safeIndex = Math.min(
+        index,
+        units.length - 1
+      );
+
+      const value =
+        bytes /
+        Math.pow(1024, safeIndex);
+
+      return `${value.toFixed(
+        value >= 10 || safeIndex === 0
+          ? 0
+          : 1
+      )} ${units[safeIndex]}`;
+    }
 
 
-    /* Paste animation */
+    function formatDate(dateString) {
+      const date = new Date(dateString);
 
-    textInput.addEventListener("paste", () => {
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
 
-      dropZone.classList.add("active");
-
-      setTimeout(() => {
-        dropZone.classList.remove("active");
-      }, 500);
-
-    });
-
-
-    /* File selection */
-
-    fileInput.addEventListener("change", () => {
-
-      const files = Array.from(fileInput.files);
-
-      if (!files.length) return;
-
-      files.forEach(file => {
-
-        createDemoFileItem(file);
-
-      });
-
-      fileInput.value = "";
-
-    });
-
-
-    /* Demo file item */
-
-    function createDemoFileItem(file) {
-
-      emptyState.style.display = "none";
-
-      const item = document.createElement("div");
-
-      item.className = "item";
-
-      const icon = getFileIcon(file.type);
-
-      const size = formatFileSize(file.size);
-
-      item.innerHTML = `
-
-        <div class="item-icon">
-          ${icon}
-        </div>
-
-        <div class="item-info">
-
-          <strong>${escapeHTML(file.name)}</strong>
-
-          <span>${size} · ${file.type || "File"}</span>
-
-        </div>
-
-        <div class="item-actions">
-
-          <button class="item-button">
-            Download
-          </button>
-
-          <button class="item-delete" title="Delete">
-            ×
-          </button>
-
-        </div>
-
-      `;
-
-      item.querySelector(".item-delete").addEventListener(
-        "click",
-        () => {
-
-          item.classList.add("removing");
-
-          setTimeout(() => {
-
-            item.remove();
-
-            checkEmpty();
-
-          }, 250);
-
+      return date.toLocaleString(
+        undefined,
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
         }
       );
-
-      itemsContainer.appendChild(item);
-
     }
 
 
-    /* File icons */
-
-    function getFileIcon(type) {
-
-      if (type.startsWith("image/")) return "🖼️";
-
-      if (type.startsWith("video/")) return "🎬";
-
-      if (type.startsWith("audio/")) return "🎵";
-
-      if (type.includes("pdf")) return "📕";
-
-      if (
-        type.includes("zip") ||
-        type.includes("compressed")
-      ) return "📦";
-
-      return "📄";
-
+    function isImage(item) {
+      return Boolean(
+        item.mimeType &&
+        item.mimeType.startsWith("image/")
+      );
     }
 
 
-    /* File size */
-
-    function formatFileSize(bytes) {
-
-      if (bytes < 1024)
-        return bytes + " B";
-
-      if (bytes < 1024 * 1024)
-        return (bytes / 1024).toFixed(1) + " KB";
-
-      if (bytes < 1024 * 1024 * 1024)
-        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-
-      return (bytes / (1024 * 1024 * 1024)).toFixed(1) + " GB";
-
+    function isVideo(item) {
+      return Boolean(
+        item.mimeType &&
+        item.mimeType.startsWith("video/")
+      );
     }
 
 
-    /* Escape text */
-
-    function escapeHTML(text) {
-
-      const div = document.createElement("div");
-
-      div.textContent = text;
-
-      return div.innerHTML;
-
+    function isAudio(item) {
+      return Boolean(
+        item.mimeType &&
+        item.mimeType.startsWith("audio/")
+      );
     }
 
 
-    /* Empty state */
-
-    function checkEmpty() {
-
-      const items =
-        itemsContainer.querySelectorAll(".item");
-
-      emptyState.style.display =
-        items.length ? "none" : "flex";
-
+    function fileUrl(id) {
+      return `/api/file/${encodeURIComponent(id)}`;
     }
 
 
-    /* Password modal */
+    function showToast(message, type = "normal") {
+      const toast =
+        document.createElement("div");
 
-    passwordButton.addEventListener("click", () => {
+      toast.className =
+        `toast toast-${type}`;
 
-      passwordModal.classList.add("show");
+      toast.textContent = message;
 
-    });
-
-
-    closePasswordModal.addEventListener("click", () => {
-
-      passwordModal.classList.remove("show");
-
-    });
-
-
-    passwordToggle.addEventListener("change", () => {
-
-      passwordField.classList.toggle(
-        "visible",
-        passwordToggle.checked
+      elements.toastContainer.appendChild(
+        toast
       );
 
-    });
-
-
-    savePassword.addEventListener("click", () => {
-
-      passwordModal.classList.remove("show");
-
-    });
-
-
-    /* Delete all */
-
-    deleteAllButton.addEventListener("click", () => {
-
-      const items =
-        itemsContainer.querySelectorAll(".item");
-
-      if (!items.length) return;
-
-      deleteModal.classList.add("show");
-
-    });
-
-
-    cancelDelete.addEventListener("click", () => {
-
-      deleteModal.classList.remove("show");
-
-    });
-
-
-    confirmDelete.addEventListener("click", () => {
-
-      itemsContainer
-        .querySelectorAll(".item")
-        .forEach(item => item.remove());
-
-      textInput.value = "";
-
-      charCount.textContent = "0 characters";
-
-      deleteModal.classList.remove("show");
-
-      checkEmpty();
-
-    });
-
-
-    /* Close modal by clicking outside */
-
-    document.querySelectorAll(".modal-overlay")
-      .forEach(overlay => {
-
-        overlay.addEventListener("click", event => {
-
-          if (event.target === overlay) {
-
-            overlay.classList.remove("show");
-
-          }
-
-        });
-
+      requestAnimationFrame(() => {
+        toast.classList.add("show");
       });
 
-  </script>
+      setTimeout(() => {
+        toast.classList.remove("show");
 
-</body>
-  </html>
+        setTimeout(() => {
+          toast.remove();
+        }, 250);
+      }, 3200);
+    }
+
+
+    function setConnection(connected) {
+      if (connected) {
+        elements.connectionStatus.innerHTML =
+          '<span class="status-dot"></span> Connected';
+
+        elements.connectionStatus.classList.remove(
+          "offline"
+        );
+      } else {
+        elements.connectionStatus.innerHTML =
+          '<span class="status-dot"></span> Offline';
+
+        elements.connectionStatus.classList.add(
+          "offline"
+        );
+      }
+    }
+
+
+    function updateCharacterCount() {
+      const count =
+        elements.textInput.value.length;
+
+      elements.charCount.textContent =
+        `${count.toLocaleString()} character${count === 1 ? "" : "s"}`;
+    }
+
+
+    async function api(url, options = {}) {
+      const response =
+        await fetch(url, {
+          credentials: "same-origin",
+          ...options
+        });
+
+      let data = null;
+
+      try {
+        data = await response.json();
+      } catch {
+        // Response has no JSON.
+      }
+
+      if (!response.ok) {
+        const error =
+          data?.error ||
+          `Request failed (${response.status})`;
+
+        const authError =
+          response.status === 401;
+
+        const err =
+          new Error(error);
+
+        err.authError = authError;
+
+        throw err;
+      }
+
+      return data;
+    }
+
+
+    async function checkAuthentication() {
+      try {
+        const data =
+          await api("/api/auth/status");
+
+        state.passwordEnabled =
+          Boolean(data.passwordEnabled);
+
+        state.authenticated =
+          Boolean(data.authenticated);
+
+        if (
+          state.passwordEnabled &&
+          !state.authenticated
+        ) {
+          showLogin();
+        } else {
+          showApp();
+          await loadItems();
+        }
+
+      } catch (error) {
+        setConnection(false);
+
+        if (error.authError) {
+          showLogin();
+        } else {
+          showToast(
+            error.message,
+            "error"
+          );
+        }
+      }
+    }
+
+
+    function showLogin() {
+      elements.app.classList.add("hidden");
+      elements.loginScreen.classList.remove(
+        "hidden"
+      );
+
+      elements.passwordInput.focus();
+
+      elements.logoutButton.classList.add(
+        "hidden"
+      );
+    }
+
+
+    function showApp() {
+      elements.loginScreen.classList.add(
+        "hidden"
+      );
+
+      elements.app.classList.remove(
+        "hidden"
+      );
+
+      if (state.passwordEnabled) {
+        elements.logoutButton.classList.remove(
+          "hidden"
+        );
+      }
+
+      setConnection(true);
+    }
+
+
+    async function login(password) {
+      elements.loginError.classList.add(
+        "hidden"
+      );
+
+      try {
+        await api(
+          "/api/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              password
+            })
+          }
+        );
+
+        state.authenticated = true;
+
+        elements.passwordInput.value = "";
+
+        showApp();
+
+        await loadItems();
+
+      } catch (error) {
+        elements.loginError.textContent =
+          error.message;
+
+        elements.loginError.classList.remove(
+          "hidden"
+        );
+      }
+    }
+
+
+    async function logout() {
+      try {
+        await api(
+          "/api/auth/logout",
+          {
+            method: "POST"
+          }
+        );
+
+        state.authenticated = false;
+
+        showLogin();
+
+      } catch (error) {
+        showToast(
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    async function loadItems() {
+      elements.loadingState.classList.remove(
+        "hidden"
+      );
+
+      elements.emptyState.classList.add(
+        "hidden"
+      );
+
+      try {
+        const data =
+          await api("/api/items");
+
+        state.items =
+          Array.isArray(data.items)
+            ? data.items
+            : [];
+
+        setConnection(true);
+
+        renderItems();
+
+      } catch (error) {
+        setConnection(false);
+
+        if (error.authError) {
+          showLogin();
+        } else {
+          showToast(
+            error.message,
+            "error"
+          );
+        }
+
+      } finally {
+        elements.loadingState.classList.add(
+          "hidden"
+        );
+      }
+    }
+
+
+    function renderItems() {
+      const items =
+        state.items;
+
+      elements.itemCount.textContent =
+        items.length;
+
+      elements.deleteAllButton.classList.toggle(
+        "hidden",
+        items.length === 0
+      );
+
+      if (items.length === 0) {
+        elements.emptyState.classList.remove(
+          "hidden"
+        );
+
+        elements.itemsList.innerHTML = "";
+
+        return;
+      }
+
+      elements.emptyState.classList.add(
+        "hidden"
+      );
+
+      elements.itemsList.innerHTML =
+        items.map(renderItem).join("");
+
+      attachItemEvents();
+    }
+
+
+    function renderItem(item) {
+      if (item.type === "text") {
+        return renderTextItem(item);
+      }
+
+      return renderFileItem(item);
+    }
+
+
+    function renderTextItem(item) {
+      const preview =
+        escapeHtml(item.text);
+
+      return `
+        <article
+          class="item-card text-item"
+          data-id="${escapeHtml(item.id)}"
+        >
+
+          <div class="item-main">
+
+            <div class="item-icon text-icon">
+              T
+            </div>
+
+            <div class="item-content">
+
+              <div class="item-topline">
+
+                <span class="item-type">
+                  TEXT
+                </span>
+
+                <span class="item-date">
+                  ${escapeHtml(
+                    formatDate(item.createdAt)
+                  )}
+                </span>
+
+              </div>
+
+              <div class="text-preview">
+                ${preview}
+              </div>
+
+              <div class="item-meta">
+                ${formatBytes(item.size)}
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="item-actions">
+
+            <button
+              class="item-button copy-button"
+              data-action="copy"
+              data-id="${escapeHtml(item.id)}"
+              type="button"
+            >
+              Copy
+            </button>
+
+            <button
+              class="item-button delete-button"
+              data-action="delete"
+              data-id="${escapeHtml(item.id)}"
+              type="button"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+    }
+
+
+    function renderFileItem(item) {
+      const url =
+        fileUrl(item.id);
+
+      let visual = `
+        <div class="item-icon file-icon">
+          ↗
+        </div>
+      `;
+
+      if (isImage(item)) {
+        visual = `
+          <div class="file-thumbnail">
+            <img
+              src="${url}"
+              alt=""
+              loading="lazy"
+            >
+          </div>
+        `;
+      } else if (isVideo(item)) {
+        visual = `
+          <div class="item-icon video-icon">
+            ▶
+          </div>
+        `;
+      } else if (isAudio(item)) {
+        visual = `
+          <div class="item-icon audio-icon">
+            ♪
+          </div>
+        `;
+      }
+
+      return `
+        <article
+          class="item-card file-item"
+          data-id="${escapeHtml(item.id)}"
+        >
+
+          <div class="item-main">
+
+            ${visual}
+
+            <div class="item-content">
+
+              <div class="item-topline">
+
+                <span class="item-type">
+                  ${escapeHtml(
+                    item.mimeType ||
+                    "FILE"
+                  ).toUpperCase()}
+                </span>
+
+                <span class="item-date">
+                  ${escapeHtml(
+                    formatDate(item.createdAt)
+                  )}
+                </span>
+
+              </div>
+
+              <div
+                class="file-name"
+                title="${escapeHtml(item.name)}"
+              >
+                ${escapeHtml(item.name)}
+              </div>
+
+              <div class="item-meta">
+                ${formatBytes(item.size)}
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="item-actions">
+
+            ${
+              isVideo(item)
+                ? `
+                  <a
+                    class="item-button"
+                    href="${url}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Play
+                  </a>
+                `
+                : isImage(item)
+                  ? `
+                    <a
+                      class="item-button"
+                      href="${url}"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      View
+                    </a>
+                  `
+                  : `
+                    <a
+                      class="item-button"
+                      href="${url}"
+                      target="_blank"
+ 
