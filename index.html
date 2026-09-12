@@ -1,1 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>QuickDrop — Private Clipboard</title>
+  <meta name="description" content="A simple private clipboard for transferring text and files between devices.">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <a class="brand" href="/">
+        <div class="brand-icon">Q</div>
+        <div>
+          <h1>QuickDrop</h1>
+          <span>Private clipboard</span>
+        </div>
+      </a>
+
+      <button class="lock-button" id="passwordButton">
+        <span>🔒</span>
+        <span>Password</span>
+        <span class="status-dot"></span>
+      </button>
+    </header>
+
+
+    <!-- Main -->
+    <main>
+
+      <section class="hero">
+        <div class="badge">
+          <span class="online-dot"></span>
+          Ready to transfer
+        </div>
+
+        <h2>Move anything<br><span>between your devices.</span></h2>
+
+        <p>
+          Paste text or upload files here. Open QuickDrop on another
+          device and everything will be waiting for you.
+        </p>
+      </section>
+
+
+      <!-- Clipboard Input -->
+      <section class="drop-zone" id="dropZone">
+
+        <div class="drop-icon">
+          <span>＋</span>
+        </div>
+
+        <textarea
+          id="textInput"
+          placeholder="Paste or type your text here..."
+          spellcheck="false"
+        ></textarea>
+
+        <div class="input-footer">
+          <span id="charCount">0 characters</span>
+
+          <span class="save-status" id="saveStatus">
+            <span class="save-dot"></span>
+            Saves automatically
+          </span>
+        </div>
+
+      </section>
+
+
+      <!-- Upload Area -->
+      <section class="upload-area">
+
+        <label for="fileInput" class="upload-button">
+          <span class="upload-icon">↑</span>
+
+          <span>
+            <strong>Upload files</strong>
+            <small>Images, videos, documents & more</small>
+          </span>
+
+          <span class="arrow">→</span>
+        </label>
+
+        <input
+          type="file"
+          id="fileInput"
+          multiple
+          hidden
+        />
+
+        <p class="upload-note">
+          Your files will appear below after uploading.
+        </p>
+
+      </section>
+
+
+      <!-- Shared Items -->
+      <section class="items-section">
+
+        <div class="section-heading">
+
+          <div>
+            <span class="section-label">SHARED CLIPBOARD</span>
+            <h3>Your items</h3>
+          </div>
+
+          <button class="delete-all" id="deleteAllButton">
+            Delete all
+          </button>
+
+        </div>
+
+
+        <div id="itemsContainer">
+
+          <!-- Empty state -->
+          <div class="empty-state" id="emptyState">
+
+            <div class="empty-icon">□</div>
+
+            <h4>Nothing here yet</h4>
+
+            <p>
+              Paste some text or upload a file to get started.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+      <div class="footer-left">
+        <span class="footer-logo">Q</span>
+        <span>QuickDrop</span>
+      </div>
+
+      <span class="footer-text">
+        Your simple cross-device clipboard
+      </span>
+
+    </footer>
+
+  </div>
+
+
+  <!-- Password Modal -->
+  <div class="modal-overlay" id="passwordModal">
+
+    <div class="modal">
+
+      <button class="modal-close" id="closePasswordModal">×</button>
+
+      <div class="modal-icon">🔒</div>
+
+      <h3>Password protection</h3>
+
+      <p>
+        Protect your shared clipboard with an optional password.
+      </p>
+
+      <label class="switch-row">
+        <span>
+          <strong>Enable password</strong>
+          <small>Require a password to access your items.</small>
+        </span>
+
+        <input type="checkbox" id="passwordToggle">
+        <span class="switch"></span>
+      </label>
+
+      <div class="password-field" id="passwordField">
+
+        <label for="passwordInput">Password</label>
+
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="Enter a password"
+        />
+
+      </div>
+
+      <button class="modal-save" id="savePassword">
+        Save settings
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Delete Confirmation -->
+  <div class="modal-overlay" id="deleteModal">
+
+    <div class="modal delete-modal">
+
+      <div class="danger-icon">!</div>
+
+      <h3>Delete everything?</h3>
+
+      <p>
+        This will permanently remove all text and uploaded files
+        from the shared clipboard.
+      </p>
+
+      <div class="modal-actions">
+        <button class="cancel-button" id="cancelDelete">
+          Cancel
+        </button>
+
+        <button class="confirm-delete" id="confirmDelete">
+          Delete all
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const textInput = document.getElementById("textInput");
+    const charCount = document.getElementById("charCount");
+    const saveStatus = document.getElementById("saveStatus");
+
+    const fileInput = document.getElementById("fileInput");
+    const dropZone = document.getElementById("dropZone");
+
+    const itemsContainer = document.getElementById("itemsContainer");
+    const emptyState = document.getElementById("emptyState");
+
+    const passwordButton = document.getElementById("passwordButton");
+    const passwordModal = document.getElementById("passwordModal");
+    const closePasswordModal =
+      document.getElementById("closePasswordModal");
+
+    const passwordToggle =
+      document.getElementById("passwordToggle");
+
+    const passwordField =
+      document.getElementById("passwordField");
+
+    const savePassword =
+      document.getElementById("savePassword");
+
+    const deleteAllButton =
+      document.getElementById("deleteAllButton");
+
+    const deleteModal =
+      document.getElementById("deleteModal");
+
+    const cancelDelete =
+      document.getElementById("cancelDelete");
+
+    const confirmDelete =
+      document.getElementById("confirmDelete");
+
+
+    /* Character counter */
+
+    textInput.addEventListener("input", () => {
+
+      const length = textInput.value.length;
+
+      charCount.textContent =
+        length.toLocaleString() +
+        (length === 1 ? " character" : " characters");
+
+      if (length > 0) {
+
+        saveStatus.innerHTML =
+          '<span class="save-dot"></span> Ready to save';
+
+      } else {
+
+        saveStatus.innerHTML =
+          '<span class="save-dot"></span> Saves automatically';
+
+      }
+
+    });
+
+
+    /* Paste animation */
+
+    textInput.addEventListener("paste", () => {
+
+      dropZone.classList.add("active");
+
+      setTimeout(() => {
+        dropZone.classList.remove("active");
+      }, 500);
+
+    });
+
+
+    /* File selection */
+
+    fileInput.addEventListener("change", () => {
+
+      const files = Array.from(fileInput.files);
+
+      if (!files.length) return;
+
+      files.forEach(file => {
+
+        createDemoFileItem(file);
+
+      });
+
+      fileInput.value = "";
+
+    });
+
+
+    /* Demo file item */
+
+    function createDemoFileItem(file) {
+
+      emptyState.style.display = "none";
+
+      const item = document.createElement("div");
+
+      item.className = "item";
+
+      const icon = getFileIcon(file.type);
+
+      const size = formatFileSize(file.size);
+
+      item.innerHTML = `
+
+        <div class="item-icon">
+          ${icon}
+        </div>
+
+        <div class="item-info">
+
+          <strong>${escapeHTML(file.name)}</strong>
+
+          <span>${size} · ${file.type || "File"}</span>
+
+        </div>
+
+        <div class="item-actions">
+
+          <button class="item-button">
+            Download
+          </button>
+
+          <button class="item-delete" title="Delete">
+            ×
+          </button>
+
+        </div>
+
+      `;
+
+      item.querySelector(".item-delete").addEventListener(
+        "click",
+        () => {
+
+          item.classList.add("removing");
+
+          setTimeout(() => {
+
+            item.remove();
+
+            checkEmpty();
+
+          }, 250);
+
+        }
+      );
+
+      itemsContainer.appendChild(item);
+
+    }
+
+
+    /* File icons */
+
+    function getFileIcon(type) {
+
+      if (type.startsWith("image/")) return "🖼️";
+
+      if (type.startsWith("video/")) return "🎬";
+
+      if (type.startsWith("audio/")) return "🎵";
+
+      if (type.includes("pdf")) return "📕";
+
+      if (
+        type.includes("zip") ||
+        type.includes("compressed")
+      ) return "📦";
+
+      return "📄";
+
+    }
+
+
+    /* File size */
+
+    function formatFileSize(bytes) {
+
+      if (bytes < 1024)
+        return bytes + " B";
+
+      if (bytes < 1024 * 1024)
+        return (bytes / 1024).toFixed(1) + " KB";
+
+      if (bytes < 1024 * 1024 * 1024)
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+
+      return (bytes / (1024 * 1024 * 1024)).toFixed(1) + " GB";
+
+    }
+
+
+    /* Escape text */
+
+    function escapeHTML(text) {
+
+      const div = document.createElement("div");
+
+      div.textContent = text;
+
+      return div.innerHTML;
+
+    }
+
+
+    /* Empty state */
+
+    function checkEmpty() {
+
+      const items =
+        itemsContainer.querySelectorAll(".item");
+
+      emptyState.style.display =
+        items.length ? "none" : "flex";
+
+    }
+
+
+    /* Password modal */
+
+    passwordButton.addEventListener("click", () => {
+
+      passwordModal.classList.add("show");
+
+    });
+
+
+    closePasswordModal.addEventListener("click", () => {
+
+      passwordModal.classList.remove("show");
+
+    });
+
+
+    passwordToggle.addEventListener("change", () => {
+
+      passwordField.classList.toggle(
+        "visible",
+        passwordToggle.checked
+      );
+
+    });
+
+
+    savePassword.addEventListener("click", () => {
+
+      passwordModal.classList.remove("show");
+
+    });
+
+
+    /* Delete all */
+
+    deleteAllButton.addEventListener("click", () => {
+
+      const items =
+        itemsContainer.querySelectorAll(".item");
+
+      if (!items.length) return;
+
+      deleteModal.classList.add("show");
+
+    });
+
+
+    cancelDelete.addEventListener("click", () => {
+
+      deleteModal.classList.remove("show");
+
+    });
+
+
+    confirmDelete.addEventListener("click", () => {
+
+      itemsContainer
+        .querySelectorAll(".item")
+        .forEach(item => item.remove());
+
+      textInput.value = "";
+
+      charCount.textContent = "0 characters";
+
+      deleteModal.classList.remove("show");
+
+      checkEmpty();
+
+    });
+
+
+    /* Close modal by clicking outside */
+
+    document.querySelectorAll(".modal-overlay")
+      .forEach(overlay => {
+
+        overlay.addEventListener("click", event => {
+
+          if (event.target === overlay) {
+
+            overlay.classList.remove("show");
+
+          }
+
+        });
+
+      });
+
+  </script>
+
+</body>
+  </html>
